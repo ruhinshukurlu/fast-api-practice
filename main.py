@@ -8,11 +8,15 @@ from fastapi import FastAPI
 from router import (
     blog_post, blog_get, user, article, product
 )
+from auth import authentication
+
 from db.database import engine
 from db import models
 from exceptions import StoryException
 
 app = FastAPI()
+
+app.include_router(authentication.router)
 app.include_router(user.router)
 app.include_router(article.router)
 app.include_router(product.router)
