@@ -4,3 +4,6 @@ sqlalchemy
 passlib
 bcrypt
 python-multipart
+jose
+python-jose
+aiofiles
