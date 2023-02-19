@@ -3,10 +3,11 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from fastapi import FastAPI
 from router import (
-    blog_post, blog_get, user, article, product
+    blog_post, blog_get, user, article, product, file
 )
 from auth import authentication
 
@@ -17,6 +18,7 @@ from exceptions import StoryException
 app = FastAPI()
 
 app.include_router(authentication.router)
+app.include_router(file.router)
 app.include_router(user.router)
 app.include_router(article.router)
 app.include_router(product.router)
@@ -48,3 +50,5 @@ app.add_middleware(
     allow_headers = ["*"],
     allow_methods = ["*"]
 )
+
+app.mount('/files', StaticFiles(directory='files'), name='files')
