@@ -7,3 +7,7 @@ python-multipart
 jose
 python-jose
 aiofiles
+requests
+pytest
+httpx # for fixing issue
+jinja2

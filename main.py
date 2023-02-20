@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from router import (
     blog_post, blog_get, user, article, product, file
 )
+from templates_folder import templates
 from auth import authentication
 
 from db.database import engine
@@ -17,6 +18,7 @@ from exceptions import StoryException
 
 app = FastAPI()
 
+app.include_router(templates.router)
 app.include_router(authentication.router)
 app.include_router(file.router)
 app.include_router(user.router)
@@ -52,3 +54,4 @@ app.add_middleware(
 )
 
 app.mount('/files', StaticFiles(directory='files'), name='files')
+app.mount("/templates_folder/static", StaticFiles(directory="templates_folder/static"), name="static")
