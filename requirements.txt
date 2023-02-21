@@ -11,3 +11,4 @@ requests
 pytest
 httpx # for fixing issue
 jinja2
+websockets
