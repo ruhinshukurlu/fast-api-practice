@@ -1,9 +1,13 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.exceptions import HTTPException
 from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.websockets import WebSocket
+
+import time
+from client import html
 
 from fastapi import FastAPI
 from router import (
@@ -35,11 +39,38 @@ def story_exception_handler(request: Request, exc: StoryException):
         content=exc.name
     )
 
+
+@app.get('/')
+async def get():
+    return HTMLResponse(html)
+
+clients = []
+
+@app.websocket('/chat')
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    clients.append(websocket)
+    while True:
+        data = await websocket.receive_text()
+        for client in clients:
+            await client.send_text(data)
+
+
 # @app.exception_handler(HTTPException)
 # def custom_handler(request: Request, exc: StoryException):
 #     return PlainTextResponse(str(exc), status_code=400)
 
 models.Base.metadata.create_all(engine)
+
+
+@app.middleware('http')
+async def add_middleware(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    duration = time.time() - start_time
+    response.headers['duration'] = str(duration)
+    return response
+
 
 origins = [
     "http://127.0.0.1:3000"
