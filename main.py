@@ -11,7 +11,7 @@ from client import html
 
 from fastapi import FastAPI
 from router import (
-    blog_post, blog_get, user, article, product, file
+    blog_post, blog_get, user, article, product, file, dependencies
 )
 from templates_folder import templates
 from auth import authentication
@@ -22,6 +22,7 @@ from exceptions import StoryException
 
 app = FastAPI()
 
+app.include_router(dependencies.router)
 app.include_router(templates.router)
 app.include_router(authentication.router)
 app.include_router(file.router)
