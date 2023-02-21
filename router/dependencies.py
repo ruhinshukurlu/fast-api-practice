@@ -28,3 +28,17 @@ def create_item(headers = Depends(convert_headers)):
         'info':"new item created",
         "headers":headers
     }
+
+
+class Account:
+    def __init__(self, name:str, email:str):
+        self.name = name
+        self.email = email
+
+
+@router.post('/user')
+def create_account(name:str, email:str, password:str, account: Account = Depends(Account)):
+    return {
+        'name':account.name,
+        "email": account.email
+    }
