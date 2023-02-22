@@ -1,1 +1,3 @@
 MyAPI: Template read for product with id 2
+test tag: test message
+	http://127.0.0.1:8000/dependencies?test=test&tag=test%20tag&message=test%20message&seperator=---
