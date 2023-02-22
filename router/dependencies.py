@@ -7,15 +7,25 @@ router = APIRouter(
 )
 
 
-def convert_headers(request:Request):
+def convert_params(request: Request, seperator:str):
+    queries = []
+    for key,value in request.query_params.items():
+        queries.append(f"{key} {seperator} {value}")
+    return queries
+
+
+def convert_headers(request:Request, seperator:str, queries = Depends(convert_params)):
     headers = []
     for key, value in request.headers.items():
-        headers.append(f"{key} -- {value}")
-    return headers
+        headers.append(f"{key} {seperator} {value}")
+    return {
+        "headers":headers,
+        "queries":queries
+    }
 
 
 @router.get('')
-def get_items(headers = Depends(convert_headers)):
+def get_items(test:str, headers = Depends(convert_headers)):
     return {
         "items":['a','b','c'],
         "headers":headers
